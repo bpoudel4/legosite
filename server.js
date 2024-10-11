@@ -1,5 +1,5 @@
 /********************************************************************************
-*  WEB322 – Assignment 02
+*  WEB322 – Assignment 03
 * 
 *  I declare that this assignment is my own work in accordance with Seneca's
 *  Academic Integrity Policy:
@@ -8,7 +8,7 @@
 * 
 *  Name: Bibek Poudel
 *  Student ID: 157056227
-*  Date: 2024/09/25
+*  Date: 2024/10/11
 ********************************************************************************/
 
 const express = require("express");
@@ -17,10 +17,10 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 8080;
 
-require('pg'); // explicitly require the "pg" module
+require('pg'); 
 const Sequelize = require('sequelize');
 
-// app.use(express.static('public'));
+
 app.use(express.static(__dirname + '/public'));
 
 app.set('views', __dirname + '/views');
@@ -70,7 +70,7 @@ console.log(data);
 
 app.get('/lego/sets/:set_num', async(req, res) => {
     const setNum = req.params.set_num;
-    const data = await legoData.getAllSets(); // Function that fetches lego data
+    const data = await legoData.getAllSets(); 
 
     try {
         const set = data.find(s => s.set_num === setNum);
