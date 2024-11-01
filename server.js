@@ -74,7 +74,7 @@ app.get('/lego/sets', async (req, res) => {
       res.render('sets', { sets: legoDatas}); // Pass the data to your EJS template
   } catch (error) {
       console.error('Error fetching Lego data:', error); // Log any errors
-      res.status(500).send('Internal Server Error'); // Handle error response
+      res.status(500).send('Internal Server Error MF'); // Handle error response
   }
 });
 
