@@ -24,8 +24,10 @@ const Sequelize = require('sequelize');
 app.use(express.static(__dirname + '/public'));
 
 // app.set('views', __dirname + '/views');
-app.set('view engine', 'ejs');
 
+app.set("views", __dirname + "/views");
+app.set("view engine", "ejs");
+\
 
 
 legoData.initialize().then(() => {
@@ -74,7 +76,7 @@ app.get('/lego/sets', async (req, res) => {
       res.render('sets', { sets: legoDatas}); // Pass the data to your EJS template
   } catch (error) {
       console.error('Error fetching Lego data:', error); // Log any errors
-      res.status(500).send('Internal Server Error MF'); // Handle error response
+      res.status(500).send('Internal Server Error'); // Handle error response
   }
 });
 
