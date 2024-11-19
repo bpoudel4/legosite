@@ -103,6 +103,8 @@
                 <th>Year</th>
                 <th>Parts</th>
                 <th>Details</th>
+                <th>Edit</th>
+                <th>Delete</th>
             </tr>
         </thead>
         <tbody>
@@ -120,6 +122,17 @@
                     <td>
                         <a href="/lego/sets/<%= set.set_num %>" class="btn btn-secondary">
                             Details
+                        </a>
+                    </td>
+                    <td>
+                        <a href="/lego/editSet/<%= set.set_num %>" class="btn btn-success">Edit</a>
+
+                        </a>
+                    </td>
+                    <td>
+                        <a href="/lego/deleteSet/<%= set.set_num %>" class="btn btn-error">Delete Set</a>
+
+
                         </a>
                     </td>
                 </tr>

@@ -1,5 +1,5 @@
 /********************************************************************************
-*  WEB322 – Assignment 04
+*  WEB322 – Assignment 05
 * 
 *  I declare that this assignment is my own work in accordance with Seneca's
 *  Academic Integrity Policy:
@@ -8,7 +8,7 @@
 * 
 *  Name: Bibek Poudel
 *  Student ID: 157056227
-*  Date: 2024/11/1
+*  Date: 2024/11/19
 ********************************************************************************/
 
 const express = require("express");
@@ -16,6 +16,8 @@ const legoData = require("./modules/legoSets");
 const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 8080;
+const { Theme, Set, getAllThemes, addSet ,getSetByNum,editSet,deleteSet } = require('./modules/legoSets');
+
 
 require('pg'); 
 const Sequelize = require('sequelize');
@@ -24,6 +26,7 @@ const Sequelize = require('sequelize');
 app.use(express.static(__dirname + '/public'));
 
 // app.set('views', __dirname + '/views');
+
 
 app.set("views", __dirname + "/views");
 app.set("view engine", "ejs");
@@ -47,6 +50,7 @@ legoData.initialize().then(() => {
 //   res.status(404).render("404", { message: "The page you are looking for does not exist." });
 // });
 
+app.use(express.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => {
     // res.sendFile(path.join(__dirname, '/views/home.html'));
@@ -80,8 +84,89 @@ app.get('/lego/sets', async (req, res) => {
   }
 });
 
+// app.get('/lego/addSet', (req, res) => {
+//   Theme.findAll()
+//       .then((themes) => {
+//           res.render('addSet', { themes });
+//       })
+//       .catch((err) => {
+//           res.status(500).send('Error fetching themes: ' + err);
+//       });
+// });
+
+app.get('/lego/addSet', async (req, res) => {
+  try {
+      const themes = await getAllThemes();
+      res.render('addSet', { themes });
+  } catch (err) {
+      res.render('500', { message: `Unable to load themes: ${err.message}` });
+  }
+});
+
+app.get('/lego/editSet/:num', async (req, res) => {
+  const setNum = req.params.num;
+
+  try {
+      const set = await getSetByNum(setNum);
+      const themes = await getAllThemes();
+
+      res.render('editSet', { set, themes });
+  } catch (err) {
+      res.status(404).render('404', { message: `Error retrieving data: ${err.message}` });
+  }
+});
+
+app.post('/lego/editSet', async (req, res) => {
+  const { set_num, ...setData } = req.body;
+
+  try {
+      await editSet(set_num, setData);
+      res.redirect('/lego/sets');
+  } catch (err) {
+      res.render('500', { message: `I'm sorry, but we have encountered the following error: ${err.errors[0].message}` });
+  }
+});
+
+app.get('/lego/deleteSet/:num', async (req, res) => {
+  const setNum = req.params.num;
+
+  try {
+      await deleteSet(setNum);
+      res.redirect('/lego/sets');
+  } catch (err) {
+      res.render('500', { message: `I'm sorry, but we have encountered the following error: ${err.message}` });
+  }
+});
 
 
+
+// app.post('/lego/addSet', (req, res) => {
+//   const { name, year, num_parts, img_url, theme_id, set_num } = req.body;
+
+//   Set.create({
+//       name,
+//       year,
+//       num_parts,
+//       img_url,
+//       theme_id,
+//       set_num,
+//   })
+//       .then(() => {
+//           res.redirect('/lego'); // Redirect to the main LEGO page or wherever appropriate
+//       })
+//       .catch((err) => {
+//           res.status(500).send('Error adding set: ' + err);
+//       });
+// });
+
+app.post('/lego/addSet', async (req, res) => {
+  try {
+      await addSet(req.body);
+      res.redirect('/lego/sets');
+  } catch (err) {
+      res.render('500', { message: `I'm sorry, but we have encountered the following error: ${err.errors[0].message}` });
+  }
+});
 
 
 //   app.get('/lego/sets', async(req, res) => {

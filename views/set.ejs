@@ -50,12 +50,14 @@
         <h2>Details:</h2>
         <ul>
             <li><strong>Year Released:</strong> <%= set.year %></li>
-            <li><strong>Theme:</strong> <%= set.theme %></li>
+            <li><strong>Theme:</strong> <%= set.theme.name %></li>
             <li><strong>Number of Parts:</strong> <%= set.num_parts %></li>
         </ul>
         <div id="quote"></div>
         <button onclick="history.back(); return false;">Go Back</button>
     </div>
+  
+
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
